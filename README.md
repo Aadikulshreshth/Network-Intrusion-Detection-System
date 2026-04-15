@@ -1,66 +1,68 @@
 # 🚀 Network Intrusion Detection System (NIDS)
 
-A real-time Network Intrusion Detection System built using **Machine Learning (Random Forest)** with a **FastAPI backend** and **Next.js frontend dashboard**.
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green?logo=fastapi)
+![Next.js](https://img.shields.io/badge/Next.js-Frontend-black?logo=next.js)
+![Scikit-Learn](https://img.shields.io/badge/ML-RandomForest-orange?logo=scikit-learn)
+![Status](https://img.shields.io/badge/Status-Active-success)
+
+A real-time Network Intrusion Detection System built using Machine Learning (Random Forest) with a FastAPI backend and Next.js frontend dashboard.
 
 ---
 
-## 📌 Overview
+## Overview
 
-This project monitors live network traffic, extracts features, and classifies flows as **BENIGN or THREAT** using a trained ML model based on the **CIC-IDS-2017 dataset**.
-
----
-
-## ⚙️ Tech Stack
-
-* **Backend:** FastAPI (Python)
-* **Frontend:** Next.js + Tailwind CSS
-* **State Management:** Zustand
-* **ML Model:** Random Forest (scikit-learn)
-* **Packet Processing:** Scapy (Multi-threaded Ingestion)
-* **Data:** CIC-IDS-2017
-* **Deployment:** ngrok
+This project monitors live network traffic, extracts features, and classifies flows as BENIGN or THREAT using a trained ML model based on the CIC-IDS-2017 dataset.
 
 ---
 
-## 🔥 Features
+## Tech Stack
 
-* 📡 Real-time traffic sniffing
-* 🧠 ML-based intrusion detection
-* ⚡ Live predictions API
-* 📊 Interactive dashboard (charts + logs)
-* 🔄 Auto polling from frontend
-* 🌐 ngrok public endpoint support
-* 🔍 XAI Integration: Uses SHAP values to explain predictions
-
----
-
-## 🧠 Detection Logic
-
-Our system uses a **Hybrid Detection Pipeline** for maximum efficiency:
-
-1. **Heuristic Tier**
-
-   * High-speed rule-based detection
-   * Examples:
-
-     * DoS → more than 100 packets
-     * Port Scan → more than 5 unique ports
-
-2. **ML Tier**
-
-   * Random Forest classifier trained on CIC-IDS-2017
-   * Detects complex attack patterns
-
-3. **Priority Engine**
-
-   * Flows sorted by packet density
-   * High-severity threats processed with minimal latency
+* Backend: FastAPI (Python)
+* Frontend: Next.js + Tailwind CSS
+* State Management: Zustand
+* ML Model: Random Forest (scikit-learn)
+* Packet Processing: Scapy (multi-threaded ingestion)
+* Dataset: CIC-IDS-2017
+* Deployment: ngrok
 
 ---
 
-## 📂 Project Structure
+## Features
 
-```
+* Real-time network traffic sniffing
+* Machine learning-based intrusion detection
+* Live prediction API
+* Interactive dashboard with charts and logs
+* Automatic polling from frontend
+* Public API access using ngrok
+* SHAP-based explainability (XAI integration)
+
+---
+
+## Detection Logic
+
+The system uses a hybrid detection pipeline:
+
+1. Heuristic Tier
+   High-speed rule-based detection
+
+   * DoS: more than 100 packets
+   * Port scan: more than 5 unique ports
+
+2. ML Tier
+   Random Forest classifier trained on CIC-IDS-2017
+   Detects complex attack patterns
+
+3. Priority Engine
+   Flows sorted by packet density
+   Ensures high-severity processing with minimal latency
+
+---
+
+## Project Structure
+
+```id="k3b2pq"
 NIDS_PROJECT/
 │
 ├── backend/
@@ -82,53 +84,38 @@ NIDS_PROJECT/
 
 ---
 
-## 📦 Model Download (IMPORTANT)
+## Model Download
 
-The trained model is not included due to size limitations.
-
-Download it from:
+Download model files from:
 https://drive.google.com/uc?id=1HF5gDrxY99h2YLllnDL_I-t16OVluKcH
 
-Place the files inside:
+Place them inside:
 
 ```
 backend/
 ```
 
-Required files:
-
-* `nids_rf_model.pkl`
-* `nids_label_encoder.pkl`
-* `nids_features_list.pkl`
-
 ---
 
-## 🖥️ Backend Setup
+## Backend Setup
 
-```bash
+```bash id="j7nqnp"
 cd backend
 pip install -r requirements.txt
-```
-
-### Run Server
-
-```bash
 python -m uvicorn api:app --reload
 ```
 
-### ⚠️ Linux / WSL Users
+### Linux / WSL
 
-Scapy requires root privileges:
-
-```bash
+```bash id="e3d9fx"
 sudo python api.py
 ```
 
 ---
 
-## 🌐 Frontend Setup
+## Frontend Setup
 
-```bash
+```bash id="0h6d8j"
 cd frontend
 npm install
 npm run dev
@@ -142,80 +129,65 @@ http://localhost:3000
 
 ---
 
-## 🌍 Connect via ngrok
+## ngrok Setup
 
-```bash
+```bash id="q3r4hf"
 ngrok http 8000
 ```
 
-Copy the HTTPS URL and paste into frontend settings:
-
-```
-https://your-ngrok-url.ngrok-free.dev
-```
-
-⚠️ Note: Increase polling interval in frontend settings to handle ngrok latency.
+Use the generated HTTPS URL in frontend settings.
 
 ---
 
-## 🔗 API Endpoints
+## API Endpoints
 
-| Endpoint        | Method | Description        |
-| --------------- | ------ | ------------------ |
-| `/health`       | GET    | Check API status   |
-| `/predict_live` | GET    | Get predictions    |
-| `/live_detect`  | GET    | Raw detection data |
+| Endpoint      | Method | Description |
+| ------------- | ------ | ----------- |
+| /health       | GET    | API status  |
+| /predict_live | GET    | Predictions |
+| /live_detect  | GET    | Raw data    |
 
 ---
 
-## 🧪 Testing the NIDS
+## Testing
 
-Run these from another terminal (Linux/WSL):
-
-### 🔥 DoS Simulation
-
-```bash
+```bash id="2nkj2k"
+# DoS
 sudo hping3 -S -p 80 --flood [YOUR_IP]
-```
 
-### 🔍 Port Scan
-
-```bash
+# Port scan
 sudo nmap -sS --top-ports 100 [YOUR_IP]
-```
 
-### 🔐 Brute Force Simulation
-
-```bash
+# Brute force
 sudo hping3 -S -p 80 --count 50 --interval u50000 [YOUR_IP]
 ```
 
 ---
 
-## ⚠️ Notes
+## Notes
 
 * Model files are not included due to size limits
-* Do not upload `.pkl` files to GitHub
+* Do not upload `.pkl` files
 * Run backend before frontend
-* Use ngrok for frontend-backend connection
+* Use ngrok for connection
 
 ---
 
-## 👨‍💻 Author
+## Author
 
-**Aadi Kulshreshth**
+Aadi Kulshreshth
 
 ---
 
-## ⭐ Future Improvements
+## Future Improvements
 
-* SHAP visualization enhancements
+* Advanced SHAP visualization
 * Docker deployment
-* Cloud hosting (AWS / Render)
-* Real-time alert system
+* Cloud hosting
+* Real-time alerts
 
 ---
 
-## 📌 License
+## License
 
-This project is for educational purposes.
+Educational use only
